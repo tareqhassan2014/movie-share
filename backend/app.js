@@ -6,6 +6,7 @@ const connectDB = require('./util/connectDB');
 const AppError = require('./util/AppError');
 const globalErrorHandler = require('./middleware/globalErrorHandler');
 const undefinedRoutes = require('./util/undefinedRoutes');
+const path = require('path');
 
 // connect to database
 connectDB();
@@ -20,6 +21,14 @@ app.use(express.json());
 // use routes
 app.use('/order', require('./routes/order'));
 app.use('/movie', require('./routes/movie'));
+
+//entry point
+app.get('/', (req, res) => {
+    // read file from documentation folder and send it to client
+    const file = path.join(__dirname, 'documentation', 'Documentation.pdf');
+
+    res.sendFile(file);
+});
 
 // handle undefined routes
 app.all('*', undefinedRoutes);
