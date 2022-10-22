@@ -2,7 +2,7 @@ import { CCard, CCol } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import { deleteMovie } from 'src/services/movie'
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, setRefresh }) => {
     const poster = `${process.env.REACT_APP_API_URL}/media/image/${movie?.poster}`
     const rating = movie?.rating
 
@@ -12,6 +12,7 @@ const MovieCard = ({ movie }) => {
     const deleteMovieHandler = async (id) => {
         try {
             await deleteMovie(id)
+            setRefresh((prev) => !prev)
             window.alert('Movie deleted successfully')
         } catch (error) {
             window.alert('Error deleting movie')

@@ -5,8 +5,6 @@ import { getMovieById } from 'src/services/movie'
 
 const MovieDetails = () => {
     const { id } = useParams()
-    console.log(id)
-
     const [movie, setMovie] = useState({})
 
     useEffect(() => {

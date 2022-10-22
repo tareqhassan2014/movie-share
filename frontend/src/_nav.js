@@ -1,4 +1,4 @@
-import { cilImagePlus, cilMovie } from '@coreui/icons'
+import { cilCart, cilImagePlus, cilMovie } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { CNavItem, CNavTitle } from '@coreui/react'
 
@@ -33,7 +33,7 @@ const _nav = [
         component: CNavItem,
         name: 'All Orders',
         to: '/dashboard/Orders',
-        icon: <CIcon icon={cilMovie} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
     },
 ]
 

@@ -5,7 +5,7 @@ import { getMovieById, updateMovie } from 'src/services/movie'
 
 const UpdateMovie = () => {
     const { id } = useParams()
-    console.log(id)
+
     const handelSubmit = async (e) => {
         e.preventDefault()
 
@@ -45,8 +45,13 @@ const UpdateMovie = () => {
         getMovie()
     }, [id])
 
+    const poster = `${process.env.REACT_APP_API_URL}/media/image/${movie?.poster}`
+
     return (
         <CCard className="p-5">
+            <span className="text-danger">dashboard/update/movie/{id}</span>
+            <h4 className="mt-3 mb-3">Update Movie</h4>
+            <img src={poster} className="w-25 d-block my-3" alt={movie?.title} />
             <CForm onSubmit={handelSubmit}>
                 <div className="mb-3">
                     <CFormLabel htmlFor="movieTitle">Movie Title</CFormLabel>

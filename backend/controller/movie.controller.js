@@ -18,7 +18,6 @@ exports.allMovies = catchAsync(async (req, res, next) => {
 });
 
 // create new movie
-
 exports.createMovie = catchAsync(async (req, res, next) => {
     const { title, year, rating, genre } = req.body;
     const poster = req.file?.filename;
@@ -43,6 +42,7 @@ exports.createMovie = catchAsync(async (req, res, next) => {
 
 exports.updateMovie = catchAsync(async (req, res, next) => {
     const { title, year, rating, genre } = req.body;
+    const poster = req.file?.filename;
 
     // find  movie
     const movie = await Movie.findById(req.params.id);
@@ -50,12 +50,17 @@ exports.updateMovie = catchAsync(async (req, res, next) => {
     if (!movie) return next(new AppError('Movie not found', 404));
 
     // update movie
-    movie.title = title;
-    movie.year = year;
-    movie.rating = rating;
-    movie.genre = genre;
-
-    await movie.save();
+    await Movie.findByIdAndUpdate(
+        req.params.id,
+        {
+            title,
+            year,
+            rating,
+            genre,
+            poster,
+        },
+        { new: true, runValidators: true }
+    );
 
     // send response
     res.status(200).json({

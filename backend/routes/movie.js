@@ -16,6 +16,11 @@ router
     .post(upload.single('poster'), createMovie)
     .put(updateMovie)
     .get(allMovies);
-router.route('/:id').put(updateMovie).delete(deleteMovie).get(movieDetails);
+
+router
+    .route('/:id')
+    .put(upload.single('poster'), updateMovie)
+    .delete(deleteMovie)
+    .get(movieDetails);
 
 module.exports = router;
