@@ -1,20 +1,20 @@
 import { CCard, CCol } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
-import { deleteMovie } from 'src/services/movie'
+import { placeOrder } from 'src/services/movie'
 
-const MovieCard = ({ movie }) => {
+const UserMovieCard = ({ movie }) => {
     const poster = `${process.env.REACT_APP_API_URL}/media/image/${movie?.poster}`
     const rating = movie?.rating
 
     const navigate = useNavigate()
 
     // delete movie from the list
-    const deleteMovieHandler = async (id) => {
+    const handelOrderMovie = async (id) => {
         try {
-            await deleteMovie(id)
-            window.alert('Movie deleted successfully')
+            await placeOrder(id)
+            window.alert('Movie order successfully')
         } catch (error) {
-            window.alert('Error deleting movie')
+            window.alert('Error order movie')
         }
     }
 
@@ -41,18 +41,19 @@ const MovieCard = ({ movie }) => {
                             )
                         })}
                     </div>
+
                     <div className="actions mt-3 d-flex justify-content-between">
                         <button
-                            className="btn btn-danger text-white"
-                            onClick={() => deleteMovieHandler(movie._id)}
+                            className="btn btn-success text-white"
+                            onClick={() => handelOrderMovie(movie._id)}
                         >
-                            Delete Movie
+                            Place an order
                         </button>
                         <button
                             className="btn btn-secondary text-white"
-                            onClick={() => navigate(`/dashboard/update/movie/${movie._id}`)}
+                            onClick={() => navigate(`/dashboard/movie/${movie._id}`)}
                         >
-                            Update
+                            Details
                         </button>
                     </div>
                 </div>
@@ -61,4 +62,4 @@ const MovieCard = ({ movie }) => {
     )
 }
 
-export default MovieCard
+export default UserMovieCard

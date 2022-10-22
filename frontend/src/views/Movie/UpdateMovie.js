@@ -1,74 +1,107 @@
 import { CButton, CCard, CForm, CFormInput, CFormLabel } from '@coreui/react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { updateMovie } from 'src/services/movie'
+import { getMovieById, updateMovie } from 'src/services/movie'
 
 const UpdateMovie = () => {
-  const { id } = useParams()
-  console.log(id)
-  const handelSubmit = async (e) => {
-    e.preventDefault()
+    const { id } = useParams()
+    console.log(id)
+    const handelSubmit = async (e) => {
+        e.preventDefault()
 
-    try {
-      const formData = new FormData()
+        try {
+            const formData = new FormData()
 
-      const title = e.target.title.value
-      const year = e.target.year.value
-      const rating = e.target.rating.value
-      const genre = e.target.genre.value
-      const poster = e.target.poster.files[0]
+            const title = e.target.title.value
+            const year = e.target.year.value
+            const rating = e.target.rating.value
+            const genre = e.target.genre.value
+            const poster = e.target.poster.files[0]
 
-      formData.append('title', title)
-      formData.append('year', year)
-      formData.append('rating', rating)
-      formData.append('genre', genre)
-      formData.append('poster', poster)
+            formData.append('title', title)
+            formData.append('year', year)
+            formData.append('rating', rating)
+            formData.append('genre', genre)
+            formData.append('poster', poster)
 
-      console.log({ title, year, rating, genre, poster })
-
-      const response = await updateMovie(id, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      console.log(response)
-    } catch (error) {
-      console.log(error)
+            await updateMovie(id, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            window.alert('Movie Updated Successfully')
+        } catch (error) {
+            window.alert('Something went wrong')
+        }
     }
-  }
 
-  return (
-    <CCard className="p-5">
-      <CForm onSubmit={handelSubmit}>
-        <div className="mb-3">
-          <CFormLabel htmlFor="movieTitle">Movie Title</CFormLabel>
-          <CFormInput type="text" name="title" id="movieTitle" placeholder="Enter Title" />
-        </div>
+    const [movie, setMovie] = useState({})
 
-        <div className="mb-3">
-          <CFormLabel htmlFor="movieReliesYear">Movie Relies Year</CFormLabel>
-          <CFormInput type="number" name="year" id="movieReliesYear" placeholder="2022" />
-        </div>
+    useEffect(() => {
+        const getMovie = async () => {
+            const response = await getMovieById(id)
+            setMovie(response.data)
+        }
+        getMovie()
+    }, [id])
 
-        <div className="mb-3">
-          <CFormLabel htmlFor="movieRating">Movie Rating</CFormLabel>
-          <CFormInput type="text" name="rating" id="movieRating" placeholder="4.9" />
-        </div>
-        <div className="mb-3">
-          <CFormLabel htmlFor="movieGenre">Genre</CFormLabel>
-          <CFormInput type="text" name="genre" id="movieGenre" placeholder="Romantic" />
-        </div>
+    return (
+        <CCard className="p-5">
+            <CForm onSubmit={handelSubmit}>
+                <div className="mb-3">
+                    <CFormLabel htmlFor="movieTitle">Movie Title</CFormLabel>
+                    <CFormInput
+                        type="text"
+                        name="title"
+                        id="movieTitle"
+                        placeholder="Enter Title"
+                        defaultValue={movie?.title}
+                    />
+                </div>
 
-        <div className="mb-3">
-          <CFormLabel htmlFor="formFile">Movie Poster</CFormLabel>
-          <CFormInput type="file" name="poster" accept="image/*" id="formFile" />
-        </div>
+                <div className="mb-3">
+                    <CFormLabel htmlFor="movieReliesYear">Movie Relies Year</CFormLabel>
+                    <CFormInput
+                        type="number"
+                        name="year"
+                        defaultValue={movie?.year}
+                        id="movieReliesYear"
+                        placeholder="2022"
+                    />
+                </div>
 
-        <CButton type="submit" className="mb-3">
-          Upload
-        </CButton>
-      </CForm>
-    </CCard>
-  )
+                <div className="mb-3">
+                    <CFormLabel htmlFor="movieRating">Movie Rating</CFormLabel>
+                    <CFormInput
+                        type="text"
+                        name="rating"
+                        id="movieRating"
+                        placeholder="4.9"
+                        defaultValue={movie?.rating}
+                    />
+                </div>
+                <div className="mb-3">
+                    <CFormLabel htmlFor="movieGenre">Genre</CFormLabel>
+                    <CFormInput
+                        type="text"
+                        name="genre"
+                        id="movieGenre"
+                        placeholder="Romantic"
+                        defaultValue={movie?.genre}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <CFormLabel htmlFor="formFile">Movie Poster</CFormLabel>
+                    <CFormInput type="file" name="poster" accept="image/*" id="formFile" />
+                </div>
+
+                <CButton type="submit" className="mb-3">
+                    Upload
+                </CButton>
+            </CForm>
+        </CCard>
+    )
 }
 
 export default UpdateMovie

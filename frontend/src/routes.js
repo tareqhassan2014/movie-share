@@ -5,10 +5,6 @@ const AddMovie = React.lazy(() => import('./views/Movie/AddMovie'))
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
-const routes = [
-  { path: '/movies', name: 'All Movies', element: AllMovie },
-  { path: '/add/movie', name: 'Add Movies', element: AddMovie },
-  { path: '/', name: 'Dashboard', element: Dashboard },
-]
+const routes = []
 
 export default routes
