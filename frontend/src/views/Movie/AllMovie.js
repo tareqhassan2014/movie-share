@@ -44,12 +44,7 @@ const AllMovie = () => {
 
   return (
     <CRow>
-      <CCol xs={12}>
-        <div className="mb-4">
-          <strong>All Movies</strong>
-          {content}
-        </div>
-      </CCol>
+      <CCol xs={12}>{content}</CCol>
     </CRow>
   )
 }
