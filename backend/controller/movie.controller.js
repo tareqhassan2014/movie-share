@@ -21,6 +21,7 @@ exports.allMovies = catchAsync(async (req, res, next) => {
 
 exports.createMovie = catchAsync(async (req, res, next) => {
     const { title, year, rating, genre } = req.body;
+    const poster = req.file?.filename;
 
     // create new movie
     const newMovie = await Movie.create({
@@ -28,6 +29,7 @@ exports.createMovie = catchAsync(async (req, res, next) => {
         year,
         rating,
         genre,
+        poster,
     });
 
     // send response

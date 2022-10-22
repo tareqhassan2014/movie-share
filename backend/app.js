@@ -18,6 +18,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// serve movie posters
+app.use('/media/image', express.static('uploads'));
+
 // use routes
 app.use('/order', require('./routes/order'));
 app.use('/movie', require('./routes/movie'));
@@ -25,9 +28,11 @@ app.use('/movie', require('./routes/movie'));
 //entry point
 app.get('/', (req, res) => {
     // read file from documentation folder and send it to client
-    const file = path.join(__dirname, 'documentation', 'Documentation.pdf');
+    // const file = path.join(__dirname, 'documentation', 'Documentation.pdf');
 
-    res.sendFile(file);
+    const link = 'https://documenter.getpostman.com/view/23360778/2s84DpwiZK';
+    // redirect to documentation
+    res.redirect(link);
 });
 
 // handle undefined routes
