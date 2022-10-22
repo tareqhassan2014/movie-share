@@ -1,4 +1,5 @@
 const MovieOrder = require('../models/movie_order_model');
+const AppError = require('../util/AppError');
 const catchAsync = require('../util/catchAsync');
 
 // make order
