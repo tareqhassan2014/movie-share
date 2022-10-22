@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const movieSchema = new Schema(
     {
-        Title: {
+        title: {
             type: String,
             required: true,
         },
@@ -12,11 +12,11 @@ const movieSchema = new Schema(
             type: Number,
             required: true,
         },
-        Rating: {
+        rating: {
             type: Number,
             required: true,
         },
-        Genre: {
+        genre: {
             type: String,
             required: true,
         },

@@ -1,13 +1,29 @@
 // create new movie
 
+const Movie = require('../models/movie_model');
+const MovieOrder = require('../models/movie_order_model');
+const AppError = require('../util/AppError');
 const catchAsync = require('../util/catchAsync');
 
-exports.createMovie = catchAsync(async (req, res) => {
-    const { id, title, year, rating, genre } = req.body;
+// view movies
+
+exports.allMovies = catchAsync(async (req, res, next) => {
+    const movies = await Movie.find();
+
+    // send response
+    res.status(200).json({
+        success: true,
+        data: movies,
+    });
+});
+
+// create new movie
+
+exports.createMovie = catchAsync(async (req, res, next) => {
+    const { title, year, rating, genre } = req.body;
 
     // create new movie
-    const newMovie = Movie.create({
-        id,
+    const newMovie = await Movie.create({
         title,
         year,
         rating,
@@ -23,24 +39,21 @@ exports.createMovie = catchAsync(async (req, res) => {
 
 // update movie
 
-exports.updateMovie = catchAsync(async (req, res) => {
-    const { id, title, year, rating, genre } = req.body;
+exports.updateMovie = catchAsync(async (req, res, next) => {
+    const { title, year, rating, genre } = req.body;
+
+    // find  movie
+    const movie = await Movie.findById(req.params.id);
+
+    if (!movie) return next(new AppError('Movie not found', 404));
 
     // update movie
-    const movie = await Movie.findByIdAndUpdate(
-        req.params.id,
-        {
-            id,
-            title,
-            year,
-            rating,
-            genre,
-        },
-        {
-            new: true,
-            runValidators: true,
-        }
-    );
+    movie.title = title;
+    movie.year = year;
+    movie.rating = rating;
+    movie.genre = genre;
+
+    await movie.save();
 
     // send response
     res.status(200).json({
@@ -51,57 +64,27 @@ exports.updateMovie = catchAsync(async (req, res) => {
 
 // delete movie
 
-exports.deleteMovie = catchAsync(async (req, res) => {
-    await Movie.findByIdAndDelete(req.params.id);
+exports.deleteMovie = catchAsync(async (req, res, next) => {
+    const movie = await Movie.findById(req.params.id);
+
+    if (!movie) return next(new AppError('Movie not found', 404));
+
+    await movie.remove();
 
     // send response
-    res.status(204).json({
-        success: true,
-        data: null,
-    });
+    res.status(204).json({});
 });
 
-// view movies
+// movie details
 
-exports.viewMovies = catchAsync(async (req, res) => {
-    const movies = await Movie.find();
+exports.movieDetails = catchAsync(async (req, res, next) => {
+    const movie = await Movie.findById(req.params.id);
+
+    if (!movie) return next(new AppError('Movie not found', 404));
 
     // send response
     res.status(200).json({
         success: true,
-        data: movies,
-    });
-});
-
-// view orders
-
-exports.viewOrders = catchAsync(async (req, res) => {
-    const orders = await MovieOrder.find();
-
-    // send response
-    res.status(200).json({
-        success: true,
-        data: orders,
-    });
-});
-
-// confirm order
-
-exports.confirmOrder = catchAsync(async (req, res) => {
-    const order = await MovieOrder.findByIdAndUpdate(
-        req.params.id,
-        {
-            status: 'confirmed',
-        },
-        {
-            new: true,
-            runValidators: true,
-        }
-    );
-
-    // send response
-    res.status(200).json({
-        success: true,
-        data: order,
+        data: movie,
     });
 });
